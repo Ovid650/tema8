@@ -2,49 +2,81 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ConsoleApp11
+public class Book
 {
-    public class Book
-    {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Author { get; set; }
-        public int Year { get; set; }
-        public int CopiesAvailable { get; set; }
-    }
+    public int Id { get; set; }
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public int Year { get; set; }
+    public int CopiesAvailable { get; set; }
+}
 
-    public class Program
+class Program
+{
+    static void Main()
     {
-        static void Main(string[] args)
+        List<Book> books = new List<Book>
         {
-            List<Book> books = new List<Book>
-            {
-                new Book { Id = 1, Title = "C# in Depth", Author = "Jon Skeet", Year = 2019, CopiesAvailable = 5 },
-                new Book { Id = 2, Title = "Pro C# 7", Author = "Andrew Troelsen", Year = 2018, CopiesAvailable = 2 },
-                new Book { Id = 3, Title = "C# 6.0 and the .NET 4.6 Framework", Author = "Andrew Troelsen", Year = 2015, CopiesAvailable = 0 },
-                new Book { Id = 4, Title = "Learning C# by Developing Games", Author = "Harrison Ferrone", Year = 2020, CopiesAvailable = 4 },
-                new Book { Id = 5, Title = "CLR via C#", Author = "Jeffrey Richter", Year = 2012, CopiesAvailable = 1 }
-            };
+            new Book { Id = 1, Title = "C# in Depth", Author = "Jon Skeet", Year = 2019, CopiesAvailable = 5 },
+            new Book { Id = 2, Title = "Pro C# 7", Author = "Andrew Troelsen", Year = 2018, CopiesAvailable = 2 },
+            new Book { Id = 3, Title = "C# 6.0 and the .NET 4.6 Framework", Author = "Andrew Troelsen", Year = 2015, CopiesAvailable = 0 },
+            new Book { Id = 4, Title = "Learning C# by Developing Games", Author = "Harrison Ferrone", Year = 2020, CopiesAvailable = 4 },
+            new Book { Id = 5, Title = "CLR via C#", Author = "Jeffrey Richter", Year = 2012, CopiesAvailable = 1 }
+        };
 
-            var scriseAndrew = books.Count(book => book.Author == "Andrew Troelsen");
-            var ordonare = books.OrderBy(book => book.Year);
-            var oCopie = books.Where(book => book.CopiesAvailable >= 1).Select(book => book.Title);
-            var totalCopiesAvailable = books.Sum(book => book.CopiesAvailable);
-            var unique = books.Select(book => book.Author).Distinct().ToList();
+        var booksByTroelsen = books.Where(book => book.Author == "Andrew Troelsen").ToList();
 
-            Console.WriteLine($"Andrew Troelsen a scris {scriseAndrew} carti");
-            Console.WriteLine("Aici e lista cartilor ordonate dupa an:");
-            foreach (var book in ordonare)
-            {
-                Console.WriteLine($" - {book.Title} ({book.Year})");
-            }
-            Console.WriteLine($"Aici sunt cartile ce au cel putin o copie: {string.Join(", ", oCopie)}");
-            Console.WriteLine($"In total sunt {totalCopiesAvailable} copii");
-            Console.WriteLine("Cartile distincte sunt:");
-            foreach (var author in unique)
-            {
-                Console.WriteLine($" - {author}");
-            }
+        Console.WriteLine("Books written by Andrew Troelsen:");
+        foreach (var book in booksByTroelsen)
+        {
+            Console.WriteLine($"- {book.Title} ({book.Year})");
+        }
+        Console.WriteLine();
+
+        var booksOrderedByYearDesc = books.OrderByDescending(book => book.Year).ToList();
+
+        Console.WriteLine("Books ordered by publication year (descending):");
+        foreach (var book in booksOrderedByYearDesc)
+        {
+            Console.WriteLine($"- {book.Title} ({book.Year})");
+        }
+        Console.WriteLine();
+
+        var titlesWithCopiesAvailable = books
+            .Where(book => book.CopiesAvailable > 0)
+            .Select(book => book.Title)
+            .ToList();
+
+        Console.WriteLine("Titles of books with at least one copy available:");
+        foreach (var title in titlesWithCopiesAvailable)
+        {
+            Console.WriteLine($"- {title}");
+        }
+        Console.WriteLine();
+
+        var totalAvailableCopies = books.Sum(book => book.CopiesAvailable);
+        Console.WriteLine($"Total number of copies available in the library: {totalAvailableCopies}");
+        Console.WriteLine();
+
+        var uniqueAuthors = books.Select(book => book.Author).Distinct().ToList();
+
+        Console.WriteLine("Unique authors in the collection:");
+        foreach (var author in uniqueAuthors)
+        {
+            Console.WriteLine($"- {author}");
+        }
+        Console.WriteLine();
+
+        var secondPage = books
+            .OrderBy(book => book.Title)
+            .Skip(2)
+            .Take(2)
+            .ToList();
+
+        Console.WriteLine("Second page of books, ordered by title:");
+        foreach (var book in secondPage)
+        {
+            Console.WriteLine($"- {book.Title} ({book.Year})");
         }
     }
 }
