@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp11
+{
+    public class Book
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public int Year { get; set; }
+        public int CopiesAvailable { get; set; }
+    }
+
+    public class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Book> books = new List<Book>
+            {
+                new Book { Id = 1, Title = "C# in Depth", Author = "Jon Skeet", Year = 2019, CopiesAvailable = 5 },
+                new Book { Id = 2, Title = "Pro C# 7", Author = "Andrew Troelsen", Year = 2018, CopiesAvailable = 2 },
+                new Book { Id = 3, Title = "C# 6.0 and the .NET 4.6 Framework", Author = "Andrew Troelsen", Year = 2015, CopiesAvailable = 0 },
+                new Book { Id = 4, Title = "Learning C# by Developing Games", Author = "Harrison Ferrone", Year = 2020, CopiesAvailable = 4 },
+                new Book { Id = 5, Title = "CLR via C#", Author = "Jeffrey Richter", Year = 2012, CopiesAvailable = 1 }
+            };
+
+            var scriseAndrew = books.Count(book => book.Author == "Andrew Troelsen");
+            var ordonare = books.OrderBy(book => book.Year);
+            var oCopie = books.Where(book => book.CopiesAvailable >= 1).Select(book => book.Title);
+            var totalCopiesAvailable = books.Sum(book => book.CopiesAvailable);
+            var unique = books.Select(book => book.Author).Distinct().ToList();
+
+            Console.WriteLine($"Andrew Troelsen a scris {scriseAndrew} carti");
+            Console.WriteLine("Aici e lista cartilor ordonate dupa an:");
+            foreach (var book in ordonare)
+            {
+                Console.WriteLine($" - {book.Title} ({book.Year})");
+            }
+            Console.WriteLine($"Aici sunt cartile ce au cel putin o copie: {string.Join(", ", oCopie)}");
+            Console.WriteLine($"In total sunt {totalCopiesAvailable} copii");
+            Console.WriteLine("Cartile distincte sunt:");
+            foreach (var author in unique)
+            {
+                Console.WriteLine($" - {author}");
+            }
+        }
+    }
+}
